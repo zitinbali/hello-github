@@ -1,8 +1,14 @@
 ---
 title: "DSE3101_Lecture 2"
 author: Zitin Bali
-output: github_document
 date: "2024-01-26"
+output: 
+  github_document:
+    toc: true
+    toc_depth: 2
+    fig_width: 7
+    fig_height: 6
+  
 ---
 
 ```{r setup, include=FALSE}

@@ -3,6 +3,9 @@ DSE3101_Lecture 2
 Zitin Bali
 2024-01-26
 
+- [R Markdown](#r-markdown)
+- [Including Plots](#including-plots)
+
 ## R Markdown
 
 This is an R Markdown document. Markdown is a simple formatting syntax
