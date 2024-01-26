@@ -3,36 +3,62 @@ DSE3101_Lecture 2
 Zitin Bali
 2024-01-26
 
-- [R Markdown](#r-markdown)
-- [Including Plots](#including-plots)
-
-## R Markdown
-
-This is an R Markdown document. Markdown is a simple formatting syntax
-for authoring HTML, PDF, and MS Word documents. For more details on
-using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that
-includes both content as well as the output of any embedded R code
-chunks within the document. You can embed an R code chunk like this:
+- [Statistics on Returns](#statistics-on-returns)
+- [S&P Prices](#sp-prices)
+- [S&P Yearly Returns](#sp-yearly-returns)
 
 ``` r
-summary(cars)
+library(tidyverse)
 ```
 
-    ##      speed           dist       
-    ##  Min.   : 4.0   Min.   :  2.00  
-    ##  1st Qu.:12.0   1st Qu.: 26.00  
-    ##  Median :15.0   Median : 36.00  
-    ##  Mean   :15.4   Mean   : 42.98  
-    ##  3rd Qu.:19.0   3rd Qu.: 56.00  
-    ##  Max.   :25.0   Max.   :120.00
+    ## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+    ## ✔ dplyr     1.1.4     ✔ readr     2.1.5
+    ## ✔ forcats   1.0.0     ✔ stringr   1.5.1
+    ## ✔ ggplot2   3.4.4     ✔ tibble    3.2.1
+    ## ✔ lubridate 1.9.3     ✔ tidyr     1.3.1
+    ## ✔ purrr     1.0.2     
+    ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+    ## ✖ dplyr::filter() masks stats::filter()
+    ## ✖ dplyr::lag()    masks stats::lag()
+    ## ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
 
-## Including Plots
+## Statistics on Returns
 
-You can also embed plots, for example:
+``` r
+stocks <- readRDS('./wk2_stocks.rds')
 
-![](wk2-workshop_files/figure-gfm/pressure-1.png)<!-- -->
+cumulative_returns = sum(stocks$SPY_returns)*100
+ave_daily_returns = mean(stocks$SPY_returns)*100
+std_dev = sd(stocks$SPY_returns)*100
+```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to
-prevent printing of the R code that generated the plot.
+- The cumulative returns of the S&P index during this period is 218.33%.
+
+- The average daily returns of the S&P index during this period is
+  0.04%.
+
+- The standard deviation of the daily returns of the S&P index during
+  this period is 1.22%.
+
+## S&P Prices
+
+``` r
+ggplot(data = stocks, aes(x = date, y = SPY_prices)) +
+  geom_line(data = stocks, aes(x = date, y = SPY_prices))
+```
+
+![](wk2-workshop_files/figure-gfm/plot1-1.png)<!-- -->
+
+## S&P Yearly Returns
+
+``` r
+stocks %>%
+  mutate(year = year(date)) %>%
+  filter(year <= 2023) %>%
+  group_by(year) %>%
+  summarise(yr_return = sum(SPY_returns)) %>%
+  ggplot(aes(x = year, y = yr_return)) + 
+  geom_col()
+```
+
+![](wk2-workshop_files/figure-gfm/plot2-1.png)<!-- -->

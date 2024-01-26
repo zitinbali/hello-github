@@ -12,25 +12,58 @@ output:
 ---
 
 ```{r setup, include=FALSE}
+
 knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = "/Users/zitinbali/Desktop/DSE3101/Coding/Lecture 2")
+
 ```
 
-## R Markdown
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+```{r libraries, message = FALSE}
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+library(tidyverse)
 
-```{r cars}
-summary(cars)
 ```
 
-## Including Plots
+## Statistics on Returns
 
-You can also embed plots, for example:
+```{r read}
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+stocks <- readRDS('./wk2_stocks.rds')
+
+cumulative_returns = sum(stocks$SPY_returns)*100
+ave_daily_returns = mean(stocks$SPY_returns)*100
+std_dev = sd(stocks$SPY_returns)*100
+
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
++ The cumulative returns of the S&P index during this period is `r round(cumulative_returns, 2)`%.
+
++ The average daily returns of the S&P index during this period is `r round(ave_daily_returns, 2)`%.
+
++ The standard deviation of the daily returns of the S&P index during this period is `r round(std_dev, 2)`%.
+
+
+## S&P Prices
+
+```{r plot1}
+
+ggplot(data = stocks, aes(x = date, y = SPY_prices)) +
+  geom_line(data = stocks, aes(x = date, y = SPY_prices))
+
+```
+
+## S&P Yearly Returns
+
+```{r plot2}
+
+stocks %>%
+  mutate(year = year(date)) %>%
+  filter(year <= 2023) %>%
+  group_by(year) %>%
+  summarise(yr_return = sum(SPY_returns)) %>%
+  ggplot(aes(x = year, y = yr_return)) + 
+  geom_col()
+
+```
+
