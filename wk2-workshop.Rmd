@@ -1,6 +1,7 @@
 ---
 title: "DSE3101_Lecture 2"
-output: html_document
+author: Zitin Bali
+output: github_document
 date: "2024-01-26"
 ---
 
